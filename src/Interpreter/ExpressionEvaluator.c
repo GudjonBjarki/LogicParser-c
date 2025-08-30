@@ -8,6 +8,12 @@ bool EvaluateBinaryOperation(Operator op, Expression* left, Expression* right)
       return EvaluateExpression(left) && EvaluateExpression(right);
     case OP_OR:
       return EvaluateExpression(left) || EvaluateExpression(right);
+    case OP_XOR:
+      return EvaluateExpression(left) != EvaluateExpression(right);
+    case OP_IMPL:
+      return !EvaluateExpression(left) || EvaluateExpression(right);
+    case OP_EQU:
+      return EvaluateExpression(left) == EvaluateExpression(right);
   }
 
   return false;

@@ -28,6 +28,24 @@ bool ParseOperatorToken(const StringCursor sc, StringCursor* out_sc, Token* out_
     return true;
   }
 
+  if (SS_Char(sc, '^', out_sc) || SS_String(sc, "XOR", out_sc))
+  {
+    if (out_t) *out_t = T_MakeOperator(OP_XOR);
+    return true;
+  }
+
+  if (SS_String(sc, "->", out_sc) || SS_String(sc, "IMPL", out_sc))
+  {
+    if (out_t) *out_t = T_MakeOperator(OP_IMPL);
+    return true;
+  }
+
+  if (SS_Char(sc, '=', out_sc) || SS_String(sc, "EQU", out_sc))
+  {
+    if (out_t) *out_t = T_MakeOperator(OP_EQU);
+    return true;
+  }
+
   return false;
 }
 

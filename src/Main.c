@@ -8,7 +8,7 @@
 
 int main()
 {
-  char* source = "(1 & 0)";
+  char* source = "(0 = 0)";
   Token* tokens;
   ssize_t res = Tokenize(source, &tokens);
   if (res == -1)
