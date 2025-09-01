@@ -12,6 +12,7 @@ include_directories(src/)
 
 add_executable(LogicParser
     src/Utils/DynamicBuffer.c
+    src/Utils/StringUtils.c
 
     src/Shared/Operators.c
 

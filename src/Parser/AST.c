@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "Utils/StringUtils.h"
+
 
 Expression* AllocateExpression()
 {
@@ -74,26 +76,22 @@ Expression* EX_NewProp(char* s)
 
 Expression* EX_NewPropCopy(char* s)
 {
-  size_t bufferSize = strlen(s) + 1;
-  char* newBuffer = malloc(bufferSize);
-  if (!newBuffer)
+  char* sClone = CloneString(s);
+  if (!sClone)
   {
-    fprintf(stderr, "Failed to allocate %zu bytes to copy string for proposition expression\n", bufferSize);
+    fprintf(stderr, "Failed to clone string for proposition expression\n");
     return NULL;
   }
 
-  strcpy(newBuffer, s);
-  Expression* ex = EX_NewProp(newBuffer);
-
+  Expression* ex = EX_NewProp(sClone);
   if (!ex)
   {
-    free(newBuffer);
+    free(sClone);
     return NULL;
   }
   
   return ex;
 }
-
 
 void PrettyPrintExpression(Expression* ex)
 {

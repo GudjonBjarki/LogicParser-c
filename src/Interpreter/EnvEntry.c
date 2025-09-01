@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "Utils/StringUtils.h"
+
 EnvEntry ENVE_Make(const char* key, bool value)
 {
   return (EnvEntry)
@@ -15,20 +17,17 @@ EnvEntry ENVE_Make(const char* key, bool value)
 
 EnvEntry ENVE_MakeCopy(const char* key, bool value)
 {
-  const size_t bufferSize = strlen(key) + 1;
-  char* buffer = malloc(bufferSize);
-
-  if (!buffer)
+  char* keyClone = CloneString(key);
+  if (!keyClone)
   {
-    fprintf(stderr, "Failed to allocate %zu bytes for environment entry key\n", bufferSize);
-    return (EnvEntry){.key=NULL, .value=false};
+    // @TODO Better error handling.
+    fprintf(stderr, "Failed to clone string for env entry.\n");
+    return (EnvEntry){ .key=NULL, .value=false };
   }
-  
-  strcpy(buffer, key);
 
   return (EnvEntry)
   {
-    .key = buffer,
+    .key = keyClone,
     .value = value
   };
 }
