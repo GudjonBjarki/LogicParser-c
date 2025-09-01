@@ -54,12 +54,27 @@ bool ParseBinaryOpInfixExpr(const TokenCursor tc, TokenCursor* out_tc, Expressio
   return true;
 }
 
+bool ParseProposition(const TokenCursor tc, TokenCursor* out_tc, Expression** out_expr)
+{
+  char* prop;
+  if (!TS_Literal(tc, out_tc, &prop) || prop == NULL) return false;
+  
+  if (out_expr)
+  {
+    *out_expr = EX_NewPropCopy(prop);
+  }
+
+  return true;
+}
+
+
 bool ParseExpression(const TokenCursor tc, TokenCursor* out_tc, Expression** out_expr)
 {
   Expression* expr;
   if (
     ParseBinaryOpInfixExpr(tc, out_tc, out_expr ? &expr : NULL) ||
-    ParseConstantExpr(tc, out_tc, out_expr ?  &expr : NULL)
+    ParseConstantExpr(tc, out_tc, out_expr ?  &expr : NULL) ||
+    ParseProposition(tc, out_tc, out_expr ? &expr : NULL)
   )
   {
     if (out_expr) *out_expr = expr;

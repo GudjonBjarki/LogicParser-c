@@ -2,6 +2,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 
 Expression* AllocateExpression()
@@ -25,6 +26,11 @@ void EX_Free(Expression* ex)
       EX_Free(ex->as.binaryOp.left);
       EX_Free(ex->as.binaryOp.right);
       break; 
+
+    case EXPR_PROP:
+      free(ex->as.proposition);
+      break;
+
     default: break;
   }
 
@@ -55,6 +61,39 @@ Expression* EX_NewBinop(Operator op, Expression* left, Expression* right)
   return ex;
 }
 
+Expression* EX_NewProp(char* s)
+{
+  Expression* ex = AllocateExpression();
+  if (!ex) return NULL;
+
+  ex->type = EXPR_PROP;
+  ex->as.proposition = s;
+  
+  return ex;
+}
+
+Expression* EX_NewPropCopy(char* s)
+{
+  size_t bufferSize = strlen(s) + 1;
+  char* newBuffer = malloc(bufferSize);
+  if (!newBuffer)
+  {
+    fprintf(stderr, "Failed to allocate %zu bytes to copy string for proposition expression\n", bufferSize);
+    return NULL;
+  }
+
+  strncpy(newBuffer, s, bufferSize-1);
+  Expression* ex = EX_NewProp(newBuffer);
+
+  if (!ex)
+  {
+    free(newBuffer);
+    return NULL;
+  }
+  
+  return ex;
+}
+
 
 void PrettyPrintExpression(Expression* ex)
 {
@@ -70,6 +109,10 @@ void PrettyPrintExpression(Expression* ex)
       printf(" %s ", OperatorToString(ex->as.binaryOp.operation));
       PrettyPrintExpression(ex->as.binaryOp.right);
       printf(")");
+      break;
+
+    case EXPR_PROP:
+      printf("%s", ex->as.proposition);
       break;
   }
 }

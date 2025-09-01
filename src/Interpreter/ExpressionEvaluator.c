@@ -32,6 +32,10 @@ bool EvaluateExpression(Expression* expr)
       // printf("evaluating binary operation\n");
       const struct s_ExpressionBinaryOp* binop = &expr->as.binaryOp;
       return EvaluateBinaryOperation(binop->operation, binop->left, binop->right);
+
+    case EXPR_PROP:
+      // Temporary set to false.
+      return false;
   }
 
   return false;

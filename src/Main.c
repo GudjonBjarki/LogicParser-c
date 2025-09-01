@@ -8,7 +8,7 @@
 
 int main()
 {
-  char* source = "(0 = 0)";
+  char* source = "(1 = a)";
   Token* tokens;
   ssize_t res = Tokenize(source, &tokens);
   if (res == -1)
@@ -31,6 +31,8 @@ int main()
   printf("\n");
 
   printf("Evaluates to: %d\n", EvaluateExpression(tree));
+
+  EX_Free(tree);
   return 0;
 }
 
