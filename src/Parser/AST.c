@@ -82,7 +82,7 @@ Expression* EX_NewPropCopy(char* s)
     return NULL;
   }
 
-  strncpy(newBuffer, s, bufferSize-1);
+  strcpy(newBuffer, s);
   Expression* ex = EX_NewProp(newBuffer);
 
   if (!ex)
