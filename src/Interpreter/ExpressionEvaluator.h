@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Parser/AST.h"
+#include "Env.h"
 
-
-
-bool EvaluateExpression(Expression* expr);
+bool EvaluateExpression(Environment* env, Expression* expr);

@@ -4,11 +4,12 @@
 #include "Lexer/Lexer.h"
 #include "Parser/Parser.h"
 
+#include "Interpreter/Env.h"
 #include "Interpreter/ExpressionEvaluator.h"
 
 int main()
 {
-  char* source = "(1 = a)";
+  char* source = "(a & b)";
   Token* tokens;
   ssize_t res = Tokenize(source, &tokens);
   if (res == -1)
@@ -25,14 +26,22 @@ int main()
     FreeTokenArray(tokens, numTokens);
     return 1;
   }
+  FreeTokenArray(tokens, numTokens);
+
+  Environment env = ENV_Make();
+  ENV_Set(&env, "a", true);
+  ENV_Set(&env, "b", true);
   
   printf("Expression: ");
   PrettyPrintExpression(tree);
   printf("\n");
+  
+  PrettyPrintEnv(&env);
 
-  printf("Evaluates to: %d\n", EvaluateExpression(tree));
-
+  printf("Evaluates to: %d\n", EvaluateExpression(&env, tree));
+  
   EX_Free(tree);
+  ENV_Free(&env);
   return 0;
 }
 

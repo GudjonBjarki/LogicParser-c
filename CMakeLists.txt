@@ -23,7 +23,9 @@ add_executable(LogicParser
 
     src/Parser/AST.c
     src/Parser/Parser.c
-
+  
+    src/Interpreter/EnvEntry.c
+    src/Interpreter/Env.c
     src/Interpreter/ExpressionEvaluator.c
 
     src/Main.c
