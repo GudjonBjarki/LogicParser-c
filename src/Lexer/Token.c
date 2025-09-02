@@ -68,3 +68,13 @@ void PrintToken(Token t)
   }
 }
 
+void PrettyPrintTokens(Token* tokens, size_t nTokens)
+{
+  for (size_t i = 0; i < nTokens; i++)
+  {
+    PrintToken(tokens[i]);
+    printf(", ");
+  }
+  printf("\n");
+}
+
