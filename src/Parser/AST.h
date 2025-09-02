@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Lexer/Token.h"
+#include <stdbool.h>
 
+#include "Shared/Operators.h"
 
 struct s_Expression;
 
@@ -9,7 +10,8 @@ typedef enum e_ExpressionType
 {
   EXPR_BINARY_OP,
   EXPR_CONSTANT,
-  EXPR_PROP
+  EXPR_PROP,
+  EXPR_NEGATION,
 } ExpressionType;
 
 typedef struct s_Expression
@@ -28,6 +30,9 @@ typedef struct s_Expression
 
     // EXPR_PROP
     char* proposition;
+
+    // EXPR_NEGATION
+    struct s_Expression* negation;
   } as;
 } Expression;
 
@@ -38,6 +43,7 @@ Expression* EX_NewConst(bool v);
 Expression* EX_NewBinop(Operator op, Expression* left, Expression* right);
 Expression* EX_NewProp(char* s);
 Expression* EX_NewPropCopy(char* s);
+Expression* EX_NewNegation(Expression* negatedExpr);
 
 
 void PrettyPrintExpression(Expression* ex);

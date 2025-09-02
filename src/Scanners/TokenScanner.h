@@ -19,4 +19,4 @@ bool TS_Operator(const TokenCursor tc, TokenCursor* out_tc, Operator* out_op);
 bool TS_Constant(const TokenCursor tc, TokenCursor* out_tc, bool* out_const);
 bool TS_LParen(const TokenCursor tc, TokenCursor* out_tc);
 bool TS_RParen(const TokenCursor tc, TokenCursor* out_tc);
-
+bool TS_Not(const TokenCursor tc, TokenCursor* out_tc);

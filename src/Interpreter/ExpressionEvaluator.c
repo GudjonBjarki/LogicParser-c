@@ -35,6 +35,9 @@ bool EvaluateExpression(Environment* env, Expression* expr)
 
     case EXPR_PROP:
       return ENV_Get(env, expr->as.proposition);
+
+    case EXPR_NEGATION:
+      return !(EvaluateExpression(env, expr->as.negation));
   }
 
   return false;

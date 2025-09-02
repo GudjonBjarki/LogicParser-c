@@ -29,11 +29,14 @@ void EX_Free(Expression* ex)
       EX_Free(ex->as.binaryOp.right);
       break; 
 
+    case EXPR_CONSTANT: break;
+
     case EXPR_PROP:
       free(ex->as.proposition);
       break;
-
-    default: break;
+  
+    case EXPR_NEGATION:
+      EX_Free(ex->as.negation);
   }
 
   free(ex);
@@ -93,6 +96,17 @@ Expression* EX_NewPropCopy(char* s)
   return ex;
 }
 
+Expression* EX_NewNegation(Expression* negatedExpr)
+{
+  Expression* ex = AllocateExpression();
+  if (!ex) return NULL;
+
+  ex->type = EXPR_NEGATION;
+  ex->as.negation = negatedExpr;
+
+  return ex;
+}
+
 void PrettyPrintExpression(Expression* ex)
 {
   switch (ex->type)
@@ -111,6 +125,11 @@ void PrettyPrintExpression(Expression* ex)
 
     case EXPR_PROP:
       printf("%s", ex->as.proposition);
+      break;
+
+    case EXPR_NEGATION:
+      printf("!");
+      PrettyPrintExpression(ex->as.negation);
       break;
   }
 }

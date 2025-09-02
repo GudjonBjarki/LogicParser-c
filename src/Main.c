@@ -22,7 +22,7 @@ void ThruthTableFromSource(char* source)
   }
 
   size_t numTokens = (size_t)res;
-  PrettyPrintTokens(tokens, numTokens);
+  printf("Tokens: "); PrettyPrintTokens(tokens, numTokens);
 
   Expression* tree;
   if (!Parse(tokens, numTokens, &tree))
@@ -33,7 +33,7 @@ void ThruthTableFromSource(char* source)
   }
   FreeTokenArray(tokens, numTokens);
 
-  PrettyPrintExpression(tree); printf("\n");
+  printf("Parsed expression: "); PrettyPrintExpression(tree); printf("\n");
 
   EvaluateTruthTable(tree);
 

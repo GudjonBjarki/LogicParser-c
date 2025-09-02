@@ -77,12 +77,30 @@ bool ParseProposition(const TokenCursor tc, TokenCursor* out_tc, Expression** ou
   return true;
 }
 
+bool ParseNegation(const TokenCursor tc, TokenCursor* out_tc, Expression** out_expr)
+{
+  TokenCursor bufferCursor = tc;
+  if (!TS_Not(bufferCursor, &bufferCursor)) return false;
+
+  Expression* expr;
+  if (!ParseExpression(bufferCursor, &bufferCursor, &expr))
+  {
+    return false;
+  }
+
+  if (out_expr) *out_expr = EX_NewNegation(expr);
+  if (out_tc) *out_tc = bufferCursor;
+
+  return true;
+}
+
 
 bool ParseExpression(const TokenCursor tc, TokenCursor* out_tc, Expression** out_expr)
 {
   Expression* expr;
   if (
     ParseBinaryOpInfixExpr(tc, out_tc, out_expr ? &expr : NULL) ||
+    ParseNegation(tc, out_tc, out_expr ? &expr : NULL) ||
     ParseConstantExpr(tc, out_tc, out_expr ?  &expr : NULL) ||
     ParseProposition(tc, out_tc, out_expr ? &expr : NULL)
   )

@@ -82,4 +82,9 @@ bool TS_RParen(const TokenCursor tc, TokenCursor* out_tc)
   return TS_OfType(tc, TT_RPAREN, out_tc, NULL);
 }
 
+bool TS_Not(const TokenCursor tc, TokenCursor* out_tc)
+{
+  return TS_OfType(tc, TT_NOT, out_tc, NULL);
+}
+
 

@@ -27,6 +27,11 @@ Token T_MakeRParen()
   return (Token) { .type = TT_RPAREN };
 }
 
+Token T_MakeNot()
+{
+  return (Token) { .type = TT_NOT };
+}
+
 void T_Free(Token* t)
 {
   switch (t->type)
@@ -36,8 +41,11 @@ void T_Free(Token* t)
       t->as.literal = NULL;
       break;
 
-    default:
-      break;
+    case TT_OPERATOR: break;
+    case TT_CONSTANT: break;
+    case TT_LPAREN: break;
+    case TT_RPAREN: break;
+    case TT_NOT: break;
   }
 }
 
@@ -64,6 +72,10 @@ void PrintToken(Token t)
 
     case TT_RPAREN:
        printf("RightParen");
+       break;
+
+    case TT_NOT:
+       printf("Not");
        break;
   }
 }

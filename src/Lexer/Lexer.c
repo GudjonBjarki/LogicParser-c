@@ -101,6 +101,12 @@ bool ParseKeywordToken(const StringCursor sc, StringCursor* out_sc, Token* out_t
     return true;
   }
 
+  if (SS_Char(sc, '!', out_sc))
+  { 
+    if (out_t) *out_t = T_MakeNot();
+    return true;
+  }
+
   return false;
 }
 

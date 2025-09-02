@@ -2,6 +2,7 @@
 
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "Utils/DynamicBuffer.h"
 #include "ExpressionEvaluator.h"
@@ -12,6 +13,8 @@ void FindPropositionsRec(Expression* expr, DynamicBuffer* propBuffer)
 {
   switch (expr->type)
   {
+    case EXPR_CONSTANT: break;
+
     case EXPR_PROP:
       char* prop = expr->as.proposition;
 
@@ -29,9 +32,11 @@ void FindPropositionsRec(Expression* expr, DynamicBuffer* propBuffer)
       FindPropositionsRec(expr->as.binaryOp.left, propBuffer);
       FindPropositionsRec(expr->as.binaryOp.right, propBuffer);
       break;
-
-    default:
+    
+    case EXPR_NEGATION:
+      FindPropositionsRec(expr->as.negation, propBuffer);
       break;
+
   }
 }
 

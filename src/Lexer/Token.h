@@ -12,6 +12,7 @@ typedef enum e_TokenType
   TT_CONSTANT,
   TT_LPAREN,
   TT_RPAREN,
+  TT_NOT,
 } TokenType;
 
 
@@ -33,6 +34,7 @@ Token T_MakeOperator(Operator op);
 Token T_MakeConstant(bool v);
 Token T_MakeLParen();
 Token T_MakeRParen();
+Token T_MakeNot();
 void T_Free(Token* t);
 
 void PrintToken(Token t);
