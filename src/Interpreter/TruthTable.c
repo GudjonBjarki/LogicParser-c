@@ -52,13 +52,27 @@ void EvaluateTruthTable(Expression* expr)
   char** props;
   size_t numProps = FindPropositions(expr, &props);
 
+  size_t* propLengths = malloc(sizeof(size_t) * numProps);
+  for (size_t i = 0; i < numProps; i++)
+  {
+    propLengths[i] = strlen(props[i]);
+  }
+
   Environment env = ENV_Make();
   if (numProps == 0)
   {
     printf("Expression contains no props.\n");
     printf("Statement evaluates to: %d\n", EvaluateExpression(&env, expr));
     goto CLEANUP;
+  }  
+
+
+  for (size_t i = 0; i < numProps; i++)
+  {
+    printf(" %s ", props[i]);
+    printf("|");
   }
+  printf(" RES\n");
 
   size_t numIterations = 1 << numProps;
   for (long i = (long)numIterations-1; i >= 0; i--)
@@ -68,15 +82,21 @@ void EvaluateTruthTable(Expression* expr)
       char* prop = props[j];
       bool value = (bool)(i & (1 << (numProps - 1 - j)));
 
-      printf("%s: %d, ", prop, value);
+      printf(" %d ", value);
+      for (size_t k = 0; k < propLengths[j] - 1; k++)
+        printf(" ");
+      printf("|");
+
+      // printf("%s: %d, ", prop, value);
       ENV_Set(&env, props[j], value);
     }
 
-    printf(" -> %d\n", EvaluateExpression(&env, expr));
+    printf(" %d\n", EvaluateExpression(&env, expr));
   }
   
 CLEANUP:
   ENV_Free(&env);
   free(props);
+  free(propLengths);
 }
 
