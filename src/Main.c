@@ -1,47 +1,62 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "Lexer/Lexer.h"
 #include "Parser/Parser.h"
 
-#include "Interpreter/Env.h"
-#include "Interpreter/ExpressionEvaluator.h"
+#include "Interpreter/TruthTable.h"
 
-int main()
+
+
+void ThruthTableFromSource(char* source)
 {
-  char* source = "(a & b)";
+  printf("Source: %s\n", source);
+
   Token* tokens;
   ssize_t res = Tokenize(source, &tokens);
   if (res == -1)
   {
     fprintf(stderr, "Failed to tokenize source. \"%s\"\n", source);
-    return 1;
+    return;
   }
 
   size_t numTokens = (size_t)res;
+  PrettyPrintTokens(tokens, numTokens);
+
   Expression* tree;
   if (!Parse(tokens, numTokens, &tree))
   {
     fprintf(stderr, "Failed to parse tokens\n");
     FreeTokenArray(tokens, numTokens);
-    return 1;
+    return;
   }
   FreeTokenArray(tokens, numTokens);
 
-  Environment env = ENV_Make();
-  ENV_Set(&env, "a", true);
-  ENV_Set(&env, "b", true);
-  
-  printf("Expression: ");
-  PrettyPrintExpression(tree);
-  printf("\n");
-  
-  PrettyPrintEnv(&env);
+  PrettyPrintExpression(tree); printf("\n");
 
-  printf("Evaluates to: %d\n", EvaluateExpression(&env, tree));
-  
+  EvaluateTruthTable(tree);
+
   EX_Free(tree);
-  ENV_Free(&env);
+}
+
+
+bool ReadLine(char* dst, int maxLength)
+{
+  char* ret = fgets(dst, maxLength, stdin);
+  if (ret == NULL) return false;
+  dst[strcspn(dst, "\n")] = '\0';
+  return true;
+}
+
+int main()
+{
+  char source[1024];
+  while (ReadLine(source, sizeof(source)))
+  {
+    if (strlen(source) == 0) break;
+    ThruthTableFromSource(source);
+  }
   return 0;
 }
 
