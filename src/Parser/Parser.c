@@ -98,6 +98,16 @@ bool ParseExpression(const TokenCursor tc, TokenCursor* out_tc, Expression** out
 bool Parse(Token* tokens, size_t numTokens, Expression** out_expr)
 {
   TokenCursor cursor = TC_Create(tokens, numTokens);
-  return ParseExpression(cursor, NULL, out_expr);
+  bool res = ParseExpression(cursor, &cursor, out_expr);
+  
+  if (!res) return false;
+  if (!TC_Done(cursor))
+  {
+    fprintf(stderr, "Tokens still remain after parsing.\n");
+    fprintf(stderr, "Remainder: "); PrettyPrintTokens(TC_Cursor(cursor), cursor.length - cursor.index);
+    fprintf(stderr, "\n");
+  }
+
+  return true;
 }
 
