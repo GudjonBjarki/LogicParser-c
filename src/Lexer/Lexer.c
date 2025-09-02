@@ -16,31 +16,31 @@ bool ParseWhitespace(const StringCursor sc, StringCursor *out_sc, char** out_s)
 
 bool ParseOperatorToken(const StringCursor sc, StringCursor* out_sc, Token* out_t)
 {
-  if (SS_Char(sc, '&', out_sc) || SS_String(sc, "AND", out_sc))
+  if (SS_Char(sc, '&', out_sc) || SS_String(sc, "AND ", out_sc))
   {
     if (out_t) *out_t = T_MakeOperator(OP_AND);
     return true;
   }
 
-  if (SS_Char(sc, '|', out_sc) || SS_String(sc, "OR", out_sc))
+  if (SS_Char(sc, '|', out_sc) || SS_String(sc, "OR ", out_sc))
   {
     if (out_t) *out_t = T_MakeOperator(OP_OR);
     return true;
   }
 
-  if (SS_Char(sc, '^', out_sc) || SS_String(sc, "XOR", out_sc))
+  if (SS_Char(sc, '^', out_sc) || SS_String(sc, "XOR ", out_sc))
   {
     if (out_t) *out_t = T_MakeOperator(OP_XOR);
     return true;
   }
 
-  if (SS_String(sc, "->", out_sc) || SS_String(sc, "IMPL", out_sc))
+  if (SS_String(sc, "->", out_sc) || SS_String(sc, "IMPL ", out_sc))
   {
     if (out_t) *out_t = T_MakeOperator(OP_IMPL);
     return true;
   }
 
-  if (SS_String(sc, "==", out_sc) || SS_String(sc, "<->", out_sc) || SS_String(sc, "EQU", out_sc))
+  if (SS_String(sc, "==", out_sc) || SS_String(sc, "<->", out_sc) || SS_String(sc, "EQU ", out_sc))
   {
     if (out_t) *out_t = T_MakeOperator(OP_EQU);
     return true;
@@ -66,8 +66,8 @@ bool ParseConstantToken(const StringCursor sc, StringCursor* out_sc, Token* out_
 {
   if (
     SS_Char(sc, '1', out_sc) ||
-    SS_String(sc, "True", out_sc) ||
-    SS_Char(sc, 'T', out_sc)
+    SS_String(sc, "True ", out_sc) ||
+    SS_String(sc, "T ", out_sc)
   )
   {
     if (out_t) *out_t = T_MakeConstant(true);
@@ -76,8 +76,8 @@ bool ParseConstantToken(const StringCursor sc, StringCursor* out_sc, Token* out_
 
   if (
     SS_Char(sc, '0', out_sc) ||
-    SS_String(sc, "False", out_sc) ||
-    SS_Char(sc, 'F', out_sc)
+    SS_String(sc, "False ", out_sc) ||
+    SS_String(sc, "F ", out_sc)
   )
   {
     if (out_t) * out_t = T_MakeConstant(false);
