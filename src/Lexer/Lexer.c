@@ -129,7 +129,11 @@ ssize_t Tokenize(char *source, Token** out_tokens)
     Token token;
     if (!ParseToken(cursor, &cursor, &token))
     {
-      fprintf(stderr, "Failed to parse token at (%lu), '%s'\n", cursor.index, SC_Cursor(cursor));
+      fprintf(stderr, "Failed to parse token at char %lu. Remainder: \"%s\"\n", cursor.index, SC_Cursor(cursor));
+      fprintf(stderr, "%s\n", cursor.source);
+      for (size_t i = 0; i < cursor.index; i++) fprintf(stderr, " ");
+      fprintf(stderr, "^\n");
+
       DB_Free(&tokenBuffer);
       return -1;
     }
