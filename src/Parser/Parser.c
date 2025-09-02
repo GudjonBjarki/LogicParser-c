@@ -2,6 +2,8 @@
 
 #include "Scanners/TokenScanner.h"
 
+#include <stdio.h>
+
 bool ParseExpression(const TokenCursor tc, TokenCursor* out_tc, Expression** out_expr);
 
 
@@ -46,10 +48,18 @@ bool ParseBinaryOpInfixExpr(const TokenCursor tc, TokenCursor* out_tc, Expressio
     return false;
   }
 
+
+  if (!TS_RParen(bufferCursor, &bufferCursor))
+  {
+    return false;
+  }
+
    if (out_expr)
    {
      *out_expr = EX_NewBinop(op, left, right);
    }
+
+   if (out_tc) *out_tc = bufferCursor;
 
   return true;
 }
