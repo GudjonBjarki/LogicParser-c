@@ -17,6 +17,7 @@ add_executable(LogicParser
     src/Shared/Operators.c
 
     src/Scanners/StringScanner.c
+    src/Scanners/WStringScanner.c
     src/Scanners/TokenScanner.c
 
     src/Lexer/Token.c
