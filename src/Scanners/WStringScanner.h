@@ -16,6 +16,7 @@ typedef bool (*WCharPredicate)(wchar_t);
 WStringCursor WSC_Create(const wchar_t* source);
 bool WSC_Done(const WStringCursor sc);
 wchar_t WSC_Peek(const WStringCursor sc);
+const wchar_t* WSC_Cursor(const WStringCursor sc);
 WStringCursor WSC_Step(const WStringCursor sc, size_t n);
 
 bool WSS_Char(const WStringCursor sc, wchar_t c, WStringCursor* out_sc);

@@ -6,7 +6,7 @@
 
 #include "Utils/StringUtils.h"
 
-EnvEntry ENVE_Make(const char* key, bool value)
+EnvEntry ENVE_Make(const wchar_t* key, bool value)
 {
   return (EnvEntry)
   {
@@ -15,9 +15,9 @@ EnvEntry ENVE_Make(const char* key, bool value)
   };
 }
 
-EnvEntry ENVE_MakeCopy(const char* key, bool value)
+EnvEntry ENVE_MakeCopy(const wchar_t* key, bool value)
 {
-  char* keyClone = CloneString(key);
+  wchar_t* keyClone = CloneWString(key);
   if (!keyClone)
   {
     // @TODO Better error handling.

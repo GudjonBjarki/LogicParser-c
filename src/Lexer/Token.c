@@ -2,7 +2,7 @@
 
 #include <stdio.h>
 
-Token T_MakeLiteral(char* lit)
+Token T_MakeLiteral(wchar_t* lit)
 {
   return (Token) { .type = TT_LITERAL, .as.literal = lit };
 }
@@ -37,7 +37,7 @@ void T_Free(Token* t)
   switch (t->type)
   {
     case TT_LITERAL:
-      free(t->as.literal);
+      free((void*)t->as.literal);
       t->as.literal = NULL;
       break;
 
@@ -54,7 +54,7 @@ void PrintToken(const Token t)
   switch (t.type)
   {
     case TT_LITERAL:
-      printf("Literal('%s')", t.as.literal);
+      printf("Literal('%ls')", t.as.literal);
       break;
 
     case TT_OPERATOR:

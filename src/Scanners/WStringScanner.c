@@ -1,6 +1,7 @@
 #include "WStringScanner.h"
 
 #include "Utils/DynamicBuffer.h"
+#include <string.h>
 
 
 WStringCursor WSC_Create(const wchar_t* source)
@@ -24,6 +25,13 @@ wchar_t WSC_Peek(const WStringCursor sc)
   return WSC_Done(sc)
     ? '\0' 
     : sc.source[sc.index];
+}
+
+const wchar_t* WSC_Cursor(const WStringCursor sc)
+{
+  return WSC_Done(sc)
+    ? NULL
+    : &sc.source[sc.index];
 }
 
 WStringCursor WSC_Step(const WStringCursor sc, size_t n)

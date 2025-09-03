@@ -1,15 +1,16 @@
 #pragma once
 
 #include <stdbool.h>
+#include <wchar.h>
 
 typedef struct s_EnvEntry
 {
-  const char* key;
+  const wchar_t* key;
   bool value;
 } EnvEntry;
 
-EnvEntry ENVE_Make(const char* key, bool value);
-EnvEntry ENVE_MakeCopy(const char* key, bool value);
+EnvEntry ENVE_Make(const wchar_t* key, bool value);
+EnvEntry ENVE_MakeCopy(const wchar_t* key, bool value);
 
 void ENVE_Free(EnvEntry* e);
 

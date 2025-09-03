@@ -32,7 +32,7 @@ void EX_Free(Expression* ex)
     case EXPR_CONSTANT: break;
 
     case EXPR_PROP:
-      free(ex->as.proposition);
+      free((void*)ex->as.proposition);
       break;
   
     case EXPR_NEGATION:
@@ -66,7 +66,7 @@ Expression* EX_NewBinop(Operator op, Expression* left, Expression* right)
   return ex;
 }
 
-Expression* EX_NewProp(char* s)
+Expression* EX_NewProp(const wchar_t* s)
 {
   Expression* ex = AllocateExpression();
   if (!ex) return NULL;
@@ -77,9 +77,9 @@ Expression* EX_NewProp(char* s)
   return ex;
 }
 
-Expression* EX_NewPropCopy(char* s)
+Expression* EX_NewPropCopy(const wchar_t* s)
 {
-  char* sClone = CloneString(s);
+  wchar_t* sClone = CloneWString(s);
   if (!sClone)
   {
     fprintf(stderr, "Failed to clone string for proposition expression\n");
@@ -124,7 +124,7 @@ void PrettyPrintExpression(Expression* ex)
       break;
 
     case EXPR_PROP:
-      printf("%s", ex->as.proposition);
+      printf("%ls", ex->as.proposition);
       break;
 
     case EXPR_NEGATION:

@@ -9,15 +9,15 @@
 
 
 
-void ThruthTableFromSource(char* source)
+void ThruthTableFromSource(wchar_t* source)
 {
-  printf("Source: %s\n", source);
+  printf("Source: %ls\n", source);
 
   Token* tokens;
   ssize_t res = Tokenize(source, &tokens);
   if (res == -1)
   {
-    fprintf(stderr, "Failed to tokenize source. \"%s\"\n", source);
+    fprintf(stderr, "Failed to tokenize source.\n");
     return;
   }
 
@@ -41,20 +41,25 @@ void ThruthTableFromSource(char* source)
 }
 
 
-bool ReadLine(char* dst, int maxLength)
+bool ReadLine(wchar_t* dst, int maxLength)
 {
-  char* ret = fgets(dst, maxLength, stdin);
-  if (ret == NULL) return false;
-  dst[strcspn(dst, "\n")] = '\0';
-  return true;
+    wchar_t* ret = fgetws(dst, maxLength, stdin);
+    if (ret == NULL) return false;
+
+    size_t len = wcslen(dst);
+    if (len > 0 && dst[len - 1] == L'\n') {
+        dst[len - 1] = L'\0';
+    }
+
+    return true;
 }
 
 int main()
 {
-  char source[1024];
+  wchar_t source[1024];
   while (ReadLine(source, sizeof(source)))
   {
-    if (strlen(source) == 0) break;
+    if (wcslen(source) == 0) break;
     ThruthTableFromSource(source);
   }
   return 0;

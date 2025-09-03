@@ -16,13 +16,13 @@ void FindPropositionsRec(Expression* expr, DynamicBuffer* propBuffer)
     case EXPR_CONSTANT: break;
 
     case EXPR_PROP:
-      char* prop = expr->as.proposition;
+      const wchar_t* prop = expr->as.proposition;
 
       for (size_t i = 0; i < propBuffer->length; i++)
       {
-        const char* checkProp = *(char**)DB_Get(*propBuffer, i);
+        const wchar_t* checkProp = *(wchar_t**)DB_Get(*propBuffer, i);
 
-        if (strcmp(prop, checkProp) == 0)
+        if (wcscmp(prop, checkProp) == 0)
           return;
       }
       DB_Append(propBuffer, &expr->as.proposition);
@@ -40,13 +40,13 @@ void FindPropositionsRec(Expression* expr, DynamicBuffer* propBuffer)
   }
 }
 
-size_t FindPropositions(Expression* expr, char*** out_props)
+size_t FindPropositions(Expression* expr, wchar_t*** out_props)
 {
-  DynamicBuffer buffer = DB_Create(sizeof(char**), 8);
+  DynamicBuffer buffer = DB_Create(sizeof(wchar_t**), 8);
   FindPropositionsRec(expr, &buffer); 
 
   const size_t numProps =  buffer.length;
-  *out_props = DB_Release(&buffer);
+  *out_props = (wchar_t**)DB_Release(&buffer);
 
   return numProps;
 }
@@ -54,13 +54,13 @@ size_t FindPropositions(Expression* expr, char*** out_props)
 
 void EvaluateTruthTable(Expression* expr)
 {
-  char** props;
+  wchar_t** props;
   size_t numProps = FindPropositions(expr, &props);
 
   size_t* propLengths = malloc(sizeof(size_t) * numProps);
   for (size_t i = 0; i < numProps; i++)
   {
-    propLengths[i] = strlen(props[i]);
+    propLengths[i] = wcslen(props[i]);
   }
 
   Environment env = ENV_Make();
@@ -74,7 +74,7 @@ void EvaluateTruthTable(Expression* expr)
 
   for (size_t i = 0; i < numProps; i++)
   {
-    printf(" %s ", props[i]);
+    printf(" %ls ", props[i]);
     printf("|");
   }
   printf(" RES\n");
@@ -84,7 +84,7 @@ void EvaluateTruthTable(Expression* expr)
   {
     for (size_t j = 0; j < numProps; j++)
     {
-      char* prop = props[j];
+      wchar_t* prop = props[j];
       bool value = (bool)(i & (1 << (numProps - 1 - j)));
 
       printf(" %d ", value);

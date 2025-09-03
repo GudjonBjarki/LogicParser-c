@@ -66,7 +66,7 @@ bool ParseBinaryOpInfixExpr(const TokenCursor tc, TokenCursor* out_tc, Expressio
 
 bool ParseProposition(const TokenCursor tc, TokenCursor* out_tc, Expression** out_expr)
 {
-  char* prop;
+  const wchar_t* prop;
   if (!TS_Literal(tc, out_tc, &prop) || prop == NULL) return false;
   
   if (out_expr)

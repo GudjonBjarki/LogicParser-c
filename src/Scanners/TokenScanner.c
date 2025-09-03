@@ -45,7 +45,7 @@ bool TS_OfType(const TokenCursor tc, TokenType type, TokenCursor* out_tc, Token*
 }
 
 
-bool TS_Literal(const TokenCursor tc, TokenCursor* out_tc, char** out_literal)
+bool TS_Literal(const TokenCursor tc, TokenCursor* out_tc, const wchar_t** out_literal)
 {
   Token token;
   if (!TS_OfType(tc, TT_LITERAL, out_tc, &token)) return false;

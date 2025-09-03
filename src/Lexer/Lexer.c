@@ -2,45 +2,46 @@
 
 #include <stdio.h>
 #include <ctype.h>
+#include <wctype.h>
 
 #include "Token.h"
-#include "Scanners/StringScanner.h"
+#include "Scanners/WStringScanner.h"
 #include "Utils/DynamicBuffer.h"
 
 
-bool IsSpace(char c) { return isspace(c); }
-bool ParseWhitespace(const StringCursor sc, StringCursor *out_sc, char** out_s)
+bool IsSpace(wchar_t c) { return iswspace((wint_t)c); }
+bool ParseWhitespace(const WStringCursor sc, WStringCursor *out_sc, wchar_t** out_s)
 {
-  return SS_Span(sc, IsSpace, out_sc, out_s);
+  return WSS_Span(sc, IsSpace, out_sc, out_s);
 }
 
-bool ParseOperatorToken(const StringCursor sc, StringCursor* out_sc, Token* out_t)
+bool ParseOperatorToken(const WStringCursor sc, WStringCursor* out_sc, Token* out_t)
 {
-  if (SS_Char(sc, '&', out_sc) || SS_String(sc, "AND ", out_sc))
+  if (WSS_Char(sc, L'&', out_sc) || WSS_String(sc, L"AND ", out_sc))
   {
     if (out_t) *out_t = T_MakeOperator(OP_AND);
     return true;
   }
 
-  if (SS_Char(sc, '|', out_sc) || SS_String(sc, "OR ", out_sc))
+  if (WSS_Char(sc, L'|', out_sc) || WSS_String(sc, L"OR ", out_sc))
   {
     if (out_t) *out_t = T_MakeOperator(OP_OR);
     return true;
   }
 
-  if (SS_Char(sc, '^', out_sc) || SS_String(sc, "XOR ", out_sc))
+  if (WSS_Char(sc, L'^', out_sc) || WSS_String(sc, L"XOR ", out_sc))
   {
     if (out_t) *out_t = T_MakeOperator(OP_XOR);
     return true;
   }
 
-  if (SS_String(sc, "->", out_sc) || SS_String(sc, "IMPL ", out_sc))
+  if (WSS_String(sc, L"->", out_sc) || WSS_String(sc, L"IMPL ", out_sc))
   {
     if (out_t) *out_t = T_MakeOperator(OP_IMPL);
     return true;
   }
 
-  if (SS_String(sc, "==", out_sc) || SS_String(sc, "<->", out_sc) || SS_String(sc, "EQU ", out_sc))
+  if (WSS_String(sc, L"==", out_sc) || WSS_String(sc, L"<->", out_sc) || WSS_String(sc, L"EQU ", out_sc))
   {
     if (out_t) *out_t = T_MakeOperator(OP_EQU);
     return true;
@@ -49,11 +50,11 @@ bool ParseOperatorToken(const StringCursor sc, StringCursor* out_sc, Token* out_
   return false;
 }
 
-bool IsAlpha(char c) { return isalpha(c); }
-bool ParseLiteral(const StringCursor sc, StringCursor* out_sc, Token* out_t)
+bool IsAlpha(wchar_t c) { return iswalpha((wint_t)c); }
+bool ParseLiteral(const WStringCursor sc, WStringCursor* out_sc, Token* out_t)
 {
-  char* s = NULL;
-  if (SS_Span(sc, IsAlpha, out_sc, (out_t) ? &s : NULL) > 0)
+  wchar_t* s = NULL;
+  if (WSS_Span(sc, IsAlpha, out_sc, (out_t) ? &s : NULL) > 0)
   {
     if (out_t) *out_t = T_MakeLiteral(s);
     return true;
@@ -62,12 +63,12 @@ bool ParseLiteral(const StringCursor sc, StringCursor* out_sc, Token* out_t)
   return false;
 }
 
-bool ParseConstantToken(const StringCursor sc, StringCursor* out_sc, Token* out_t)
+bool ParseConstantToken(const WStringCursor sc, WStringCursor* out_sc, Token* out_t)
 {
   if (
-    SS_Char(sc, '1', out_sc) ||
-    SS_String(sc, "True ", out_sc) ||
-    SS_String(sc, "T ", out_sc)
+    WSS_Char(sc, L'1', out_sc) ||
+    WSS_String(sc, L"True ", out_sc) ||
+    WSS_String(sc, L"T ", out_sc)
   )
   {
     if (out_t) *out_t = T_MakeConstant(true);
@@ -75,9 +76,9 @@ bool ParseConstantToken(const StringCursor sc, StringCursor* out_sc, Token* out_
   }
 
   if (
-    SS_Char(sc, '0', out_sc) ||
-    SS_String(sc, "False ", out_sc) ||
-    SS_String(sc, "F ", out_sc)
+    WSS_Char(sc, L'0', out_sc) ||
+    WSS_String(sc, L"False ", out_sc) ||
+    WSS_String(sc, L"F ", out_sc)
   )
   {
     if (out_t) * out_t = T_MakeConstant(false);
@@ -87,21 +88,21 @@ bool ParseConstantToken(const StringCursor sc, StringCursor* out_sc, Token* out_
   return false;
 }
 
-bool ParseKeywordToken(const StringCursor sc, StringCursor* out_sc, Token* out_t)
+bool ParseKeywordToken(const WStringCursor sc, WStringCursor* out_sc, Token* out_t)
 {
-  if (SS_Char(sc, '(', out_sc))
+  if (WSS_Char(sc, L'(', out_sc))
   {
     if (out_t) *out_t = T_MakeLParen();
     return true;
   }
 
-  if (SS_Char(sc, ')', out_sc))
+  if (WSS_Char(sc, L')', out_sc))
   {
     if (out_t) *out_t = T_MakeRParen();
     return true;
   }
 
-  if (SS_Char(sc, '!', out_sc))
+  if (WSS_Char(sc, L'!', out_sc))
   { 
     if (out_t) *out_t = T_MakeNot();
     return true;
@@ -111,7 +112,7 @@ bool ParseKeywordToken(const StringCursor sc, StringCursor* out_sc, Token* out_t
 }
 
 
-bool ParseToken(const StringCursor sc, StringCursor* out_sc, Token* out_t)
+bool ParseToken(const WStringCursor sc, WStringCursor* out_sc, Token* out_t)
 {
   return (
     ParseKeywordToken(sc, out_sc, out_t) ||
@@ -121,22 +122,22 @@ bool ParseToken(const StringCursor sc, StringCursor* out_sc, Token* out_t)
   );
 }
 
-ssize_t Tokenize(char *source, Token** out_tokens)
+ssize_t Tokenize(wchar_t *source, Token** out_tokens)
 {
-  StringCursor cursor = SC_Create(source);
+  WStringCursor cursor = WSC_Create(source);
   DynamicBuffer tokenBuffer = DB_Create(sizeof(Token), 16);
   
   size_t nRead = 0;
   while (true)
   {
     ParseWhitespace(cursor, &cursor, NULL);
-    if (SC_Done(cursor)) break;
+    if (WSC_Done(cursor)) break;
 
     Token token;
     if (!ParseToken(cursor, &cursor, &token))
     {
-      fprintf(stderr, "Failed to parse token at char %lu. Remainder: \"%s\"\n", cursor.index, SC_Cursor(cursor));
-      fprintf(stderr, "%s\n", cursor.source);
+      fprintf(stderr, "Failed to parse token at char %lu. Remainder: \"%ls\"\n", cursor.index, WSC_Cursor(cursor));
+      fprintf(stderr, "%ls\n", cursor.source);
       for (size_t i = 0; i < cursor.index; i++) fprintf(stderr, " ");
       fprintf(stderr, "^\n");
 

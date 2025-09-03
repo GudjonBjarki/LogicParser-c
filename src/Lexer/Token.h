@@ -2,6 +2,7 @@
 
 #include <stdbool.h>
 #include <stdlib.h>
+#include <wchar.h>
 
 #include "Shared/Operators.h"
 
@@ -22,14 +23,14 @@ typedef struct s_Token
 
   union u_TokenData
   {
-    char* literal;
+    const wchar_t* literal;
     Operator operator;
     bool constant;
   } as;
 } Token;
 
 
-Token T_MakeLiteral(char* lit);
+Token T_MakeLiteral(wchar_t* lit);
 Token T_MakeOperator(Operator op);
 Token T_MakeConstant(bool v);
 Token T_MakeLParen();

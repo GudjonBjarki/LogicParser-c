@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdbool.h>
+#include <wchar.h>
 
 #include "Shared/Operators.h"
 
@@ -29,7 +30,7 @@ typedef struct s_Expression
     bool constant;
 
     // EXPR_PROP
-    char* proposition;
+    const wchar_t* proposition;
 
     // EXPR_NEGATION
     struct s_Expression* negation;
@@ -41,8 +42,8 @@ void EX_Free(Expression* ex);
 
 Expression* EX_NewConst(bool v);
 Expression* EX_NewBinop(Operator op, Expression* left, Expression* right);
-Expression* EX_NewProp(char* s);
-Expression* EX_NewPropCopy(char* s);
+Expression* EX_NewProp(const wchar_t* s);
+Expression* EX_NewPropCopy(const wchar_t* s);
 Expression* EX_NewNegation(Expression* negatedExpr);
 
 
