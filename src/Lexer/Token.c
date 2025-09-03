@@ -49,7 +49,7 @@ void T_Free(Token* t)
   }
 }
 
-void PrintToken(Token t)
+void PrintToken(const Token t)
 {
   switch (t.type)
   {
@@ -80,7 +80,7 @@ void PrintToken(Token t)
   }
 }
 
-void PrettyPrintTokens(Token* tokens, size_t nTokens)
+void PrettyPrintTokens(const Token* tokens, size_t nTokens)
 {
   for (size_t i = 0; i < nTokens; i++)
   {

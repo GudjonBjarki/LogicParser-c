@@ -4,15 +4,15 @@
 
 typedef struct s_TokenCursor
 {
-  Token* buffer;
+  const Token* buffer;
   size_t index;
   size_t length;
 } TokenCursor;
 
 
-TokenCursor TC_Create(Token* tokens, size_t length);
+TokenCursor TC_Create(const Token* tokens, size_t length);
 bool TC_Done(const TokenCursor tc);
-Token* TC_Cursor(const TokenCursor tc);
+const Token* TC_Cursor(const TokenCursor tc);
 
 bool TS_Literal(const TokenCursor tc, TokenCursor* out_tc, char** out_literal);
 bool TS_Operator(const TokenCursor tc, TokenCursor* out_tc, Operator* out_op);

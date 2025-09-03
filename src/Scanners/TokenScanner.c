@@ -1,6 +1,6 @@
 #include "TokenScanner.h"
 
-TokenCursor TC_Create(Token* tokens, size_t length)
+TokenCursor TC_Create(const Token* tokens, size_t length)
 {
   return (TokenCursor)
   {
@@ -15,7 +15,7 @@ bool TC_Done(const TokenCursor tc)
   return tc.index >= tc.length;
 }
 
-Token* TC_Cursor(const TokenCursor tc)
+const Token* TC_Cursor(const TokenCursor tc)
 {
   return TC_Done(tc) ? NULL : &tc.buffer[tc.index];
 }
@@ -35,7 +35,7 @@ TokenCursor TC_Step(const TokenCursor tc, size_t n)
 
 bool TS_OfType(const TokenCursor tc, TokenType type, TokenCursor* out_tc, Token* out_t)
 {
-  Token* token = TC_Cursor(tc);
+  const Token* token = TC_Cursor(tc);
   if (!token) return false;
   if (token->type != type) return false;
 

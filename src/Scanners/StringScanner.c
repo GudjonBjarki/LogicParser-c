@@ -3,10 +3,9 @@
 #include <string.h>
 #include <stddef.h>
 
-// #include "Utils/CharBuffer.h"
 #include "Utils/DynamicBuffer.h"
 
-StringCursor SC_Create(char* source)
+StringCursor SC_Create(const char* source)
 {
   size_t length = strlen(source);
   return (StringCursor)
@@ -29,7 +28,7 @@ char SC_Peek(const StringCursor sc)
     : sc.source[sc.index];
 }
 
-char* SC_Cursor(const StringCursor sc)
+const char* SC_Cursor(const StringCursor sc)
 {
   return SC_Done(sc)
     ? NULL
@@ -70,7 +69,7 @@ bool SS_CharIf(const StringCursor sc, CharPredicate predicate, StringCursor* out
   return true;
 }
 
-bool SS_String(const StringCursor sc, char* s, StringCursor* out_sc)
+bool SS_String(const StringCursor sc, const char* s, StringCursor* out_sc)
 {
   StringCursor bufferParser = sc;
 

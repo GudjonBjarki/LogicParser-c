@@ -37,5 +37,5 @@ Token T_MakeRParen();
 Token T_MakeNot();
 void T_Free(Token* t);
 
-void PrintToken(Token t);
-void PrettyPrintTokens(Token* tokens, size_t nTokens);
+void PrintToken(const Token t);
+void PrettyPrintTokens(const Token* tokens, size_t nTokens);
