@@ -1,5 +1,7 @@
 #pragma once
 
+#include <wchar.h>
+
 
 typedef enum e_Operator
 {
@@ -10,4 +12,4 @@ typedef enum e_Operator
   OP_EQU,
 } Operator;
 
-char* OperatorToString(Operator op);
+const wchar_t* OperatorToString(Operator op);

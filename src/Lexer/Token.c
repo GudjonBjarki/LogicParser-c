@@ -58,7 +58,7 @@ void PrintToken(const Token t)
       break;
 
     case TT_OPERATOR:
-      printf("Operator(%s)", OperatorToString(t.as.operator));
+      printf("Operator(%ls)", OperatorToString(t.as.operator));
       break;
 
     case TT_CONSTANT:

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <locale.h>
 
 #include "Lexer/Lexer.h"
 #include "Parser/Parser.h"
@@ -56,6 +57,8 @@ bool ReadLine(wchar_t* dst, int maxLength)
 
 int main()
 {
+  setlocale(LC_ALL, "");
+
   wchar_t source[1024];
   while (ReadLine(source, sizeof(source)))
   {

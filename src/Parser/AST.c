@@ -118,7 +118,7 @@ void PrettyPrintExpression(Expression* ex)
     case EXPR_BINARY_OP:
       printf("(");
       PrettyPrintExpression(ex->as.binaryOp.left);
-      printf(" %s ", OperatorToString(ex->as.binaryOp.operation));
+      printf(" %ls ", OperatorToString(ex->as.binaryOp.operation));
       PrettyPrintExpression(ex->as.binaryOp.right);
       printf(")");
       break;
@@ -128,7 +128,7 @@ void PrettyPrintExpression(Expression* ex)
       break;
 
     case EXPR_NEGATION:
-      printf("!");
+      printf("%ls", L"¬");
       PrettyPrintExpression(ex->as.negation);
       break;
   }
